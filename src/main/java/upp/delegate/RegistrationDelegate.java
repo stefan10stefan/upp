@@ -24,11 +24,21 @@ public class RegistrationDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         List<FormDTO> dto = (List<FormDTO>) delegateExecution.getVariable("registerData");
-        String taskId = (String) delegateExecution.getVariable("taskId");
+        String processId = (String) delegateExecution.getVariable("processId");
         User user = userConverter.convert(dto);
+
+        User dbUser = userService.getUserByEmail(user.getEmail());
+
+        if(dbUser != null) {
+            delegateExecution.setVariable("dataOK", false);
+            delegateExecution.setVariable("userId", user.getId());
+            return;
+        }
+
         user.setUserType(UserType.WRITER);
-        user.setTaskId(taskId);
+        user.setProcessId(processId);
         user.setRegistrationToken(Long.toHexString(Double.doubleToLongBits(Math.random())));
+
         user = userService.save(user);
 
         delegateExecution.setVariable("dataOK", user != null);

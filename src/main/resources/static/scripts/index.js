@@ -11,7 +11,7 @@ function buttonLoginClick(){
 	var data = JSON.stringify([
 	             {"fieldId":"email",
 	            "fieldValue":email},
-	            {"fieldId":"lozinka",
+	            {"fieldId":"password",
 		            "fieldValue":lozinka},
 		            
 	             ]);
@@ -22,7 +22,7 @@ function buttonLoginClick(){
 	if(res !=null){
 			$.ajax({
 				async: false,
-				url: "http://localhost:8082/user/loginUser",
+				url: "http://localhost:8082/api/user/loginUser",
 		        type: "POST",
 		        contentType:"application/json",
 		        data : data,
@@ -31,19 +31,18 @@ function buttonLoginClick(){
 		        headers: {  'Access-Control-Allow-Origin': '*' },
 		        success: function (data2) {
 	         		if(data2!=null){
-	         			if(data2.uloga=="UREDNIK" && data2.isGlavni == true){
-	         				top.location.href= "homePageGlavniUrednik.html";
+	         			if(data2.userType=="WRITER"){
+	         				top.location.href= "writer.html";
 	         			}
-	         			else if(data2.uloga=="RECENZENT"){
-	         				top.location.href = "recenzentHomePage.html";
-	         			}	
-		        		else{
-		        			top.location.href = "pocetnaNC.html";
-		        		}
+	         			else if(data2.userType=="DIRECTOR"){
+	         				top.location.href = "director.html";
+	         			}
+	         			else {
+	         			top.location.href = "home.html";
+	         			}
 	         		}else{
 	         			top.location.href="registracija.html";
 	         		}
-	
                 },
                 error: function (jqxhr, textStatus, errorThrown) {
                 	toastr['error']('Ne radi');

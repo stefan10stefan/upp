@@ -49,6 +49,10 @@ public class UserConverter implements Converter<List<FormDTO>, User> {
                 user.setMovieCategory(dto.getFieldValue());
                 continue;
             }
+            if(dto.getFieldId().equals("isBeta")) {
+                user.setBeta(Boolean.parseBoolean(dto.getFieldValue()));
+                continue;
+            }
         }
 
         return user;

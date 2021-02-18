@@ -23,7 +23,8 @@ public class UserToUserDTOConverter implements Converter<User, UserDTO> {
         userDTO.setMovieCategory(user.getMovieCategory());
         userDTO.setUserType(user.getUserType());
         userDTO.setId(user.getId());
-        userDTO.setTaskId(user.getTaskId());
+        userDTO.setProcessId(user.getProcessId());
+        userDTO.setBeta(user.isBeta());
 
         return userDTO;
 

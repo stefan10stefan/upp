@@ -48,6 +48,7 @@ public class UserController {
             produces = {"application/json"}
     )
     public ResponseEntity<?> startProcess(@PathVariable String process) {
+
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(process);
 
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
@@ -55,7 +56,7 @@ public class UserController {
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
 
-        return new ResponseEntity<>(new FormFieldDTO(task.getId(), processInstance.getId(), properties),
+        return new ResponseEntity<>(new FormFieldDTO(task.getId(), processInstance.getProcessInstanceId(), properties),
                 HttpStatus.OK);
     }
 
@@ -73,8 +74,10 @@ public class UserController {
             map.put(pair.getFieldId(), pair.getFieldValue());
         }
 
+        System.out.println(task.getName());
+
         runtimeService.setVariable(task.getProcessInstanceId(), "registerData", dto);
-        runtimeService.setVariable(task.getProcessInstanceId(), "taskId", taskId);
+        runtimeService.setVariable(task.getProcessInstanceId(), "processId", task.getProcessInstanceId());
 
         formService.submitTaskForm(taskId, map);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -82,15 +85,18 @@ public class UserController {
 
     @CrossOrigin
     @RequestMapping(
-            value = "/confirm/{token}/{taskId}",
-            method = RequestMethod.POST,
+            value = "/confirm/{token}",
+            method = RequestMethod.GET,
             produces = {"application/json"}
     )
-    public ResponseEntity<?> confirmEmail(@PathVariable String token, @PathVariable String taskId) {
+    public ResponseEntity<?> confirmEmail(@PathVariable String token) {
         User user = userService.confirmUser(token);
         if(user != null) {
-            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            Task task = taskService.createTaskQuery().processInstanceId(user.getProcessId()).list().get(0);
             runtimeService.setVariable(task.getProcessInstanceId(),"confirmed", true);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("confirmed", true);
+            formService.submitTaskForm(task.getId(), map);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -152,5 +158,13 @@ public class UserController {
     public ResponseEntity<?> signout() {
         SecurityContextHolder.clearContext();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "/can-grade",
+            method = RequestMethod.GET)
+    public ResponseEntity<?> getCanGradeUser() {
+
+        return new ResponseEntity<>(userService.getCanGradeUsers(), HttpStatus.OK);
     }
 }

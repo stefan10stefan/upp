@@ -15,6 +15,11 @@ public class EmailService {
     @Async
     public void sendEmail(SimpleMailMessage mail) {
 
-        javaMailSender.send(mail);
+        try {
+            javaMailSender.send(mail);
+        }
+        catch (Exception e) {
+
+        }
     }
 }

@@ -1,14 +1,12 @@
 package upp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import upp.converter.BookDTOToBookConverter;
 import upp.dto.BookDTO;
 import upp.model.Book;
 import upp.service.BookService;
+import upp.service.UserService;
 
 import java.util.List;
 
@@ -22,9 +20,9 @@ public class BookController {
     @Autowired
     private BookDTOToBookConverter bookDTOToBookConverter;
 
-    @RequestMapping(value = "/get-all", method = RequestMethod.GET)
-    public List<Book> getAll() {
-        return bookService.findAllByUser();
+    @RequestMapping(value = "/get-user/{userId}", method = RequestMethod.GET)
+    public List<Book> getAll(@PathVariable Long userId) {
+        return bookService.findAllByUser(userId);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)

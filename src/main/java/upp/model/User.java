@@ -1,17 +1,18 @@
 package upp.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String taskId;
+    private String processId;
 
     @Column
     private String firstName;
@@ -43,8 +44,40 @@ public class User {
     @Column
     private boolean approved = false;
 
+    @Column boolean canGrade = false;
+
     @Column
     private boolean enabled = false;
+
+    @Column
+    private boolean isBeta = false;
+
+    @Column
+    private String categories = "";
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
+    public boolean isBeta() {
+        return isBeta;
+    }
+
+    public void setBeta(boolean beta) {
+        isBeta = beta;
+    }
+
+    public boolean isCanGrade() {
+        return canGrade;
+    }
+
+    public void setCanGrade(boolean canGrade) {
+        this.canGrade = canGrade;
+    }
 
     public boolean isApproved() {
         return approved;
@@ -62,12 +95,12 @@ public class User {
         this.enabled = enabled;
     }
 
-    public String getTaskId() {
-        return taskId;
+    public String getProcessId() {
+        return processId;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
     public Long getId() {

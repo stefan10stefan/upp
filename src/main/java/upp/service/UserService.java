@@ -8,10 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import upp.model.User;
+import upp.model.UserType;
 import upp.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +21,23 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    public void addCategories(Long id, String categories) {
+
+        User user = userRepository.getOne(id);
+
+        if(user == null) {
+            return;
+        }
+        user.setUserType(UserType.READER);
+        user.setCategories(categories);
+        user.setCanGrade(false);
+        userRepository.save(user);
+    }
+
+    public List<User> getCanGradeUsers() {
+        return userRepository.findAllByCanGrade(true);
+    }
 
     public User save(User user) {
         return userRepository.save(user);

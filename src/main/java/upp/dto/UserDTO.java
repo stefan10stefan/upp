@@ -16,16 +16,25 @@ public class UserDTO {
     private String email;
     private String movieCategory;
     private UserType userType;
-    private String taskId;
+    private String processId;
+    private boolean isBeta;
 
     public UserDTO() {}
 
-    public String getTaskId() {
-        return taskId;
+    public boolean isBeta() {
+        return isBeta;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public void setBeta(boolean beta) {
+        isBeta = beta;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 
     public Long getId() {

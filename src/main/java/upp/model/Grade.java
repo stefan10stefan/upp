@@ -1,10 +1,11 @@
 package upp.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="grade")
-public class Grade {
+public class Grade implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

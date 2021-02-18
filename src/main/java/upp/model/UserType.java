@@ -1,5 +1,5 @@
 package upp.model;
 
 public enum UserType {
-    WRITER, DIRECTOR
+    WRITER, DIRECTOR, READER
 }

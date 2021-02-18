@@ -31,7 +31,7 @@ public class ConfirmEmailDelegate implements JavaDelegate {
 
         message.setSubject("Confirm user account");
         message.setTo(user.getEmail());
-        message.setText("http://localhost:8082/api/user/confirm/" + user.getRegistrationToken() + "/" + user.getTaskId());
+        message.setText("http://localhost:8082/api/user/confirm/" + user.getRegistrationToken());
 
         emailService.sendEmail(message);
     }
